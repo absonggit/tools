@@ -10,3 +10,4 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/portainer/data:/data
+      - /opt/portainer/public:/public
