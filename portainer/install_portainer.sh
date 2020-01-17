@@ -13,7 +13,7 @@ error()
 
 [ -d $path ] ||  mkdir $path
 cd $path
-curl -so public.zip https://raw.githubusercontent.com/absonggit/tools/master/portainer/public.zip && unzip public.zip > /dev/null
+curl -so public.zip https://raw.githubusercontent.com/absonggit/tools/master/portainer/public.zip && unzip -o public.zip > /dev/null
 curl -so docker-compose.yml  https://raw.githubusercontent.com/absonggit/tools/master/portainer/docker-compose.yml
 docker-compose --version &> /dev/null || {
     error "docker-compose 没有安装,开始自动执行安装"
