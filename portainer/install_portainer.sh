@@ -2,12 +2,10 @@
 
 path="/opt/portainer"
 
-info()
-{
+info() {
     echo -e '\033[32m[INFO]\033[0m ' "$@"
 }
-error()
-{
+error() {
     echo -e '\033[31m[INFO]\033[0m ' "$@"
 }
 
