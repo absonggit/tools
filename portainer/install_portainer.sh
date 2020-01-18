@@ -37,7 +37,7 @@ get_public() {
 }
 install_portainer() {
     info "开始安装portainer"
-    docker-compose up -d && info "portainer 安装完成" && docker-compose ps
+    docker-compose up -d && info "安装完成" && docker-compose ps
     }
 init
 get_docker_compose
