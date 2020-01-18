@@ -7,7 +7,7 @@ info() {
 }
 
 error() {
-    echo -e '\033[31m[INFO]\033[0m ' "$@"
+    echo -e '\033[31m[ERROR]\033[0m ' "$@"
 }
 
 init() {
