@@ -6,6 +6,10 @@ info() {
     echo -e '\033[32m[INFO]\033[0m ' "$@"
 }
 
+warn() {
+    echo -e '\033[33m[WARN]\033[0m ' "$@"
+}
+
 error() {
     echo -e '\033[31m[ERROR]\033[0m ' "$@"
 }
@@ -13,7 +17,7 @@ error() {
 init() {
     info "初始化..."
     docker-compose --version &> /dev/null || {
-        error "docker-compose 没有安装,开始自动执行安装"
+        warn "docker-compose 没有安装,开始自动执行安装"
         curl -s https://raw.githubusercontent.com/absonggit/tools/master/docker_compose/install_docker_compose.sh | sh
     }
     if [ ! -d $path ]
