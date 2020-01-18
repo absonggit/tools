@@ -22,7 +22,7 @@ init() {
     fi   
     cd $path
 }
-
+init
 
 info "下载docker-compose.yml"
 curl -so docker-compose.yml  https://raw.githubusercontent.com/absonggit/tools/master/portainer/docker-compose.yml
