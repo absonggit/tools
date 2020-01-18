@@ -2,7 +2,7 @@
 if [ $# -ne 2 ]
 then
    echo "缺少必要的参数：域名 端口"
-exit
+   exit
 fi
 host=$1
 port=$2
