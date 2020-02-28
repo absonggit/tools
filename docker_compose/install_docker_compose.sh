@@ -1,4 +1,6 @@
 #!/bin/bash
+# shell 命令行执行安装 
+# curl -s https://raw.githubusercontent.com/absonggit/tools/master/docker_compose/install_docker_compose.sh |sh
 info()
 {
     echo -e '\033[32m[INFO]\033[0m ' "$@"
