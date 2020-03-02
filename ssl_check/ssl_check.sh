@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts h:p:s opts
+while getopts h:p: opts
 do
     case $opts in
         h)
@@ -7,8 +7,6 @@ do
         ;;
         p)
         port=$OPTARG
-        ;;
-        s)
         ;;
         *)
         echo "ERROR：-h 或 -p 有误"
