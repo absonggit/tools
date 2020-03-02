@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts :h:p: opts
+while getopts h:p: opts
 do
     case $opts in
         h)
@@ -9,7 +9,7 @@ do
         port=$OPTARG
         ;;
         *)
-        echo "ERROR：没有选项 -$OPTARG"
+        echo "ERROR：-$OPTARG 有误"
         echo "OPTIONS:
     -h:域名(必选)
     -p:端口(必选)"
@@ -17,6 +17,11 @@ do
         ;;
     esac
 done
+
+if [ ! $host -o $port ];then
+    echo "ERROR: -h 或 -p 有误"
+    exit
+fi
 end_date=`openssl s_client -host $host -port $port -showcerts </dev/null 2>/dev/null |
       sed -n '/BEGIN CERTIFICATE/,/END CERT/p' |
       openssl x509 -text 2>/dev/null |
@@ -28,4 +33,6 @@ then
     now_seconds=`date '+%s'`
     let  ssl_date=($end_date_seconds-$now_seconds)/24/3600
     echo "$host的证书还有$ssl_date天过期"
+else
+    echo "ERROR: -h 或 -p 有误"
 fi
