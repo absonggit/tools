@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts h:p:s: opts
+while getopts hps opts
 do
     case $opts in
         h)
@@ -11,7 +11,7 @@ do
         s)
         ;;
         *)
-        echo "ERROR：-$OPTARG 有误"
+        echo "ERROR：-h 或 -p 有误"
         echo "OPTIONS:
     -h:域名(必选)
     -p:端口(必选)"
