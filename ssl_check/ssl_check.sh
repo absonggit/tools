@@ -1,12 +1,12 @@
 #!/bin/bash
 
 func_usage() {
-    cat <<- EOF
-    ERROR：-h 或 -p 有误
+cat <<- EOF
+ERROR：-h 或 -p 有误
     OPTIONS:
         -h:域名(必选)
-        -p:端口(必选)"
-    EOF
+        -p:端口(必选)
+EOF
 }
 
 func_opts() {
@@ -16,7 +16,7 @@ func_opts() {
             h)host=$OPTARG;;
             p)port=$OPTARG;;
             *)
-            func_err
+            func_usage
             exit;;
         esac
     done
@@ -25,7 +25,7 @@ func_opts() {
 func_check() {
     if [ ! $host -o ! $port ]
     then
-        func_err
+        func_usage
     else
         end_date=`openssl s_client -host $host -port $port -showcerts </dev/null 2>/dev/null|
             sed -n '/BEGIN CERTIFICATE/,/END CERT/p' |
@@ -38,7 +38,7 @@ func_check() {
             let  ssl_date=($end_date_seconds-$now_seconds)/24/3600
             echo "$host的证书还有$ssl_date天过期"
         else
-            func_err
+            func_usage
         fi
     fi
 }
