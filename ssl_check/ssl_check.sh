@@ -1,10 +1,12 @@
 #!/bin/bash
 
-func_err() {
-    echo "ERROR：-h 或 -p 有误"
-    echo "OPTIONS:
-    -h:域名(必选)
-    -p:端口(必选)"
+func_usage() {
+    cat <<- EOF
+    ERROR：-h 或 -p 有误
+    OPTIONS:
+        -h:域名(必选)
+        -p:端口(必选)"
+    EOF
 }
 
 func_opts() {
