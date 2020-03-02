@@ -8,6 +8,8 @@ do
         p)
         port=$OPTARG
         ;;
+        s)
+        ;;
         *)
         echo "ERROR：-$OPTARG 有误"
         echo "OPTIONS:
