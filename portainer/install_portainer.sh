@@ -33,6 +33,7 @@ get_docker_compose() {
 }
 get_public() {
     info "下载汉化包"
+    yum install unzip -y &> /dev/null
     curl -so public.zip https://raw.githubusercontent.com/absonggit/tools/master/portainer/public.zip && unzip -o public.zip > /dev/null
 }
 install_portainer() {
