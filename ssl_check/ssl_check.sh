@@ -1,9 +1,9 @@
 #! /bin/sh
-if [ $# -ne 2 ]
-then
-   echo "缺少必要的参数：-h [域名] -p [端口]"
-   exit
-fi
+# if [ $# -ne 2 ]
+# then
+#    echo "缺少必要的参数：-h [域名] -p [端口]"
+#    exit
+# fi
 
 while getopts :h:p: opts
 do
