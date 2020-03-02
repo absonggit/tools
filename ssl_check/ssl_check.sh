@@ -18,7 +18,7 @@ do
     esac
 done
 
-if [ ! $host -o $port ]
+if [ ! $host -a ! $port ]
 then
     echo "ERROR: -h 或 -p 有误"
     echo "OPTIONS:
