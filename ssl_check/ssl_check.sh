@@ -1,6 +1,6 @@
 #!/bin/bash
 
-func_err(){
+func_err() {
     echo "ERROR：-h 或 -p 有误"
     echo "OPTIONS:
     -h:域名(必选)
