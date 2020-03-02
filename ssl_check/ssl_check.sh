@@ -23,7 +23,9 @@ done
 if [ ! $host -o $port ]
 then
     echo "ERROR: -h 或 -p 有误"
-    exit
+    echo "OPTIONS:
+    -h:域名(必选)
+    -p:端口(必选)"
 else
     end_date=`openssl s_client -host $host -port $port -showcerts </dev/null 2>/dev/null |
           sed -n '/BEGIN CERTIFICATE/,/END CERT/p' |
@@ -37,5 +39,8 @@ else
         echo "$host的证书还有$ssl_date天过期"
     else
         echo "ERROR: -h 或 -p 有误"
+        echo "OPTIONS:
+    -h:域名(必选)
+    -p:端口(必选)"
     fi
 fi
