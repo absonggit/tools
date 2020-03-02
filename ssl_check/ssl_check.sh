@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts hps opts
+while getopts h:p:s opts
 do
     case $opts in
         h)
