@@ -3,7 +3,7 @@
 # 检测的日志路径
 log_path=/home/wwwlogs/app.com.log
 # 阈值（每分钟IP的访问量）
-vpt=5
+vpt=500
 # 解封时间
 expire_time=1
 # 被拒过的IP
@@ -15,6 +15,8 @@ ip_list=$(grep "$(date +'%d/%b/%Y:%H:%M' -d "1 minute ago")" $log_path  | awk '{
 function main() {
     while [ $# != 0 ]
     do
+       if ! iptables -L INPUT | grep $1 &> /dev/null
+       then
        iptables -A INPUT -s $1 -j DROP
        # 定义临时任务，达到解封时间执行iptables规则
        export ban_ip=$1
@@ -22,6 +24,7 @@ function main() {
 echo $ban_ip >> $black_ip
 iptables -D INPUT -s $ban_ip -j DROP
 EOF
+       fi
     shift
     done
 }
