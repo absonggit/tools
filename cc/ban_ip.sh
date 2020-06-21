@@ -15,7 +15,7 @@ expire_time=30
 # 被拒过的IP
 black_ip=/tmp/black_ip_list
 # 获取到达到阈值的IP
-ip_list=$(grep "$(date +'%d/%b/%Y:%H:%M' -d "1 minute ago")" $log_path  | awk '{print $3}' | sort  | uniq -c | awk '$1>"'$vpt'"{print $2}' |xargs)
+ip_list=$(grep "$(date +'%d/%b/%Y:%H:%M' -d "1 minute ago")" $log_path  | awk '{print $3}' | sort  | uniq -c | awk '$1>'$vpt'{print $2}' |xargs)
 
 # 遍历IP数组执行iptables规则
 function main() {
