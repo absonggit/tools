@@ -1,0 +1,14 @@
+##########说明#######################
+#  配置文件放在二进制文件同级目录下 #
+#####################################
+# 接收压缩包的TG用户ID
+CHAT_ID: 1317379638
+#TG机器人TOKEN
+BOT_TOKEN: 5240878837:AAFq-JRxvsAgfAh7bQg7Zkm7bVYsgyI4dF4
+# 压缩包前缀名
+PREFIX: test
+# 需要打包的文件路径
+FILES:
+  - /root/我是A/1.txt
+  - /root/b/2.txt
+  - /root/c/3.txt
