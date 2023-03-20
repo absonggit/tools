@@ -8,3 +8,5 @@
   - 证书过期时间脚本
 - cc
   - banIP脚本
+- files_to_tg.go
+  - 多文件压缩发送TG 
