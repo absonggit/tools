@@ -15,7 +15,6 @@ install_docker() {
     info "开始安装 docker"
     curl -s https://get.docker.com | sh -
     info "安装完成"
-    docker version
 }
 install_docker
 install_docker_compose
