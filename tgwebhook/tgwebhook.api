@@ -1,0 +1,26 @@
+type (
+	TgSendReq {
+		Chatid int64  `json:"chatid"`
+		Token  string `json:"token"`
+		Text   string `json:"text"`
+	}
+	TgSendResp {
+		Status  string `json:"Status"`
+		Message string `json:"Message"`
+	}
+)
+
+service send-api {
+	@doc(
+		summary: 公开的api函数
+		desc: >
+		chatid: 接收消息的用户ID，或群组ID,
+		text: 发送的消息
+	)
+	@server(
+		handler: sendmsgtotg
+		folder: open
+	)
+	post /tg/send(TgSendReq) returns(TgSendResp)
+
+}
