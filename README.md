@@ -1,6 +1,6 @@
 # tools
 
-- docker-compose
+- docker和docker-compose
   - 安装脚本
 - portainer
   - 安装脚本(汉化)
