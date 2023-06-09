@@ -13,3 +13,10 @@
   - 配置文件 config.yaml
 - tgwebhook
   - tg 发消息webhook
+  - ```json
+    {
+        "chatid": "接收的ChatID",
+		"token": "TG Bot Token",
+		"text": "要发送的消息内容"
+    }
+    ```
