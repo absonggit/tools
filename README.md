@@ -11,3 +11,5 @@
 - files_to_tg.go
   - 多文件压缩发送TG 
   - 配置文件 config.yaml
+- tgwebhook
+  - tg 发消息webhook
