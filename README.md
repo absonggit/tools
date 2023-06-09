@@ -13,6 +13,7 @@
   - 配置文件 config.yaml
 - tgwebhook
   - tg 发消息webhook
+  - HTTP方法: POST
   - ```json
     {
     "chatid": "接收的ChatID",
