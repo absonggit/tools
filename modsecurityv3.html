@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModSecurity 规则生成器</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background-color: #f4f4f9;
+        }
+        .container { 
+            max-width: 700px; 
+            margin: 30px auto; 
+            background-color: #ffffff; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+        h1 {
+            font-size: 24px; 
+            color: #333; 
+            margin-bottom: 20px;
+        }
+        label { 
+            display: block; 
+            margin-bottom: 6px; 
+            font-weight: bold; 
+            color: #555; 
+        }
+        input, select, button, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin-bottom: 16px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+            font-size: 14px; 
+        }
+        button {
+            background-color: #007bff; 
+            color: #fff; 
+            border: none; 
+            cursor: pointer; 
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .description { 
+            font-size: 0.9em; 
+            color: #555; 
+            margin-bottom: 16px; 
+            background-color: #f9f9f9; 
+            padding: 10px; 
+            border-radius: 4px;
+            white-space: pre-wrap; 
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        textarea {
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ModSecurity 规则生成器</h1>
+    <form id="rule-form">
+        <label for="rule-id">规则 ID</label>
+        <input type="number" id="rule-id" name="rule-id" placeholder="请输入规则 ID" required>
+
+        <label for="variable">匹配变量</label>
+        <select id="variable" name="variable" onchange="updateDescription()">
+            <option value="ARGS">请求参数 (ARGS)</option>
+            <option value="REQUEST_URI">请求 URI (REQUEST_URI)</option>
+            <option value="REQUEST_HEADERS">请求头 (REQUEST_HEADERS)</option>
+            <option value="USER_AGENT">用户代理 (USER_AGENT)</option>
+            <option value="REQUEST_METHOD">请求方法 (REQUEST_METHOD)</option>
+            <option value="REQUEST_BODY">请求体 (REQUEST_BODY)</option>
+            <option value="REMOTE_ADDR">远程地址 (REMOTE_ADDR)</option>
+            <option value="QUERY_STRING">查询字符串 (QUERY_STRING)</option>
+            <option value="COOKIE">Cookie</option>
+            <option value="SERVER_PROTOCOL">服务器协议 (SERVER_PROTOCOL)</option>
+        </select>
+
+        <div class="description" id="variable-description"></div>
+
+        <label for="transform">转换函数</label>
+        <select id="transform" name="transform">
+            <option value="">无</option>
+            <option value="lowercase">lowercase (小写转换)</option>
+            <option value="uppercase">uppercase (大写转换)</option>
+            <option value="cmdLine">cmdLine (命令行规范化)</option>
+            <option value="normalisePath">normalisePath (路径标准化)</option>
+            <option value="trimLeft">trimLeft (去除左侧空格)</option>
+            <option value="trimRight">trimRight (去除右侧空格)</option>
+        </select>
+
+        <label for="operator">运算符</label>
+        <select id="operator" name="operator">
+            <option value="@contains">@contains (包含)</option>
+            <option value="@rx">@rx (正则表达式匹配)</option>
+            <option value="@streq">@streq (字符串相等)</option>
+            <option value="@beginsWith">@beginsWith (以...开始)</option>
+            <option value="@endsWith">@endsWith (以...结束)</option>
+        </select>
+
+        <label for="match">匹配字符串</label>
+        <input type="text" id="match" name="match" placeholder="请输入要匹配的字符串或正则表达式" required>
+
+        <label for="action">操作</label>
+        <select id="action" name="action">
+            <option value="deny">拒绝 (deny)</option>
+            <option value="block">阻止 (block)</option>
+            <option value="pass">通过 (pass)</option>
+            <option value="redirect">重定向 (redirect)</option>
+            <option value="log">记录 (log)</option>
+            <option value="nolog">不记录 (nolog)</option>
+            <option value="capture">捕获 (capture)</option>
+            <option value="allow">允许 (allow)</option>
+            <option value="pause">暂停 (pause)</option>
+            <option value="drop">丢弃 (drop)</option>
+        </select>
+
+        <label for="message">规则信息</label>
+        <input type="text" id="message" name="message" placeholder="请输入规则信息" required>
+
+        <button type="button" onclick="generateRule()">生成规则</button>
+    </form>
+
+    <h2>生成的 ModSecurity 规则</h2>
+    <textarea id="output" readonly></textarea>
+</div>
+
+<script>
+const variableDescriptions = {
+    "ARGS": "请求参数。\n这是传递给脚本的查询参数，通常用于分析用户输入。",
+    "REQUEST_URI": "请求 URI。\n包含整个 URI 路径，不包括查询字符串。",
+    "REQUEST_HEADERS": "请求头。\n包括所有的 HTTP 请求头信息，可以用于分析请求的来源和内容类型等。",
+    "USER_AGENT": "用户代理。\n标识客户端的应用类型、操作系统、软件供应商或版本，通常用于识别用户来源。",
+    "REQUEST_METHOD": "请求方法。\nHTTP 请求使用的方法，例如 GET、POST、PUT 等。",
+    "REQUEST_BODY": "请求体。\n通常用于 POST 请求中，包含了提交的数据内容。",
+    "REMOTE_ADDR": "远程地址。\n发送请求的客户端的 IP 地址。",
+    "QUERY_STRING": "查询字符串。\n这是 URL 中 '?' 之后的部分，通常用于 GET 请求中传递参数。",
+    "COOKIE": "Cookie。\n来自 HTTP 请求头中的所有 Cookie 信息，可用于状态管理。",
+    "SERVER_PROTOCOL": "服务器协议。\n标识 HTTP 请求的具体版本号，例如 HTTP/1.1、HTTP/2。"
+};
+
+function updateDescription() {
+    const variable = document.getElementById('variable').value;
+    document.getElementById('variable-description').innerText = variableDescriptions[variable] || '';
+}
+
+function generateRule() {
+    var ruleId = document.getElementById('rule-id').value;
+    var variable = document.getElementById('variable').value;
+    var transform = document.getElementById('transform').value;
+    var operator = document.getElementById('operator').value;
+    var match = document.getElementById('match').value;
+    var action = document.getElementById('action').value;
+    var message = document.getElementById('message').value;
+
+    if (ruleId && operator && match && action && message) {
+        var transformAction = transform ? "t:" + transform + "," : "";
+        var rule = `SecRule ${variable} "${operator} ${match}" "id:${ruleId},phase:2,${transformAction}${action},msg:'${message}'"`;
+        document.getElementById('output').value = rule;
+    } else {
+        alert('请填写所有字段');
+    }
+}
+
+document.addEventListener("DOMContentLoaded", updateDescription);
+</script>
+
+</body>
+</html>
