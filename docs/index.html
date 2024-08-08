@@ -69,7 +69,7 @@
 <div class="container">
     <h1>ModSecurity 规则生成器</h1>
     <form id="rule-form">
-        <label for="rule-id">规则 ID 范围1010000-1999999</label>
+        <label for="rule-id">规则 ID 范围400000–419999</label>
         <input type="number" id="rule-id" name="rule-id" placeholder="请输入规则 ID" required>
 
         <label for="variable">匹配变量</label>
@@ -132,11 +132,13 @@
             <option value="pass">通过 (pass)</option>
             <option value="redirect">重定向 (redirect)</option>
             <option value="log">记录 (log)</option>
+            <option value="auditlog">审计日志 (auditlog)</option>
             <option value="nolog">不记录 (nolog)</option>
             <option value="capture">捕获 (capture)</option>
             <option value="allow">允许 (allow)</option>
             <option value="pause">暂停 (pause)</option>
             <option value="drop">丢弃 (drop)</option>
+            <option value="exec">执行lua脚本 (exec)</option>
         </select>
 
         <label for="message">规则信息</label>
