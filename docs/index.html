@@ -102,8 +102,22 @@
         <label for="operator">运算符</label>
         <select id="operator" name="operator">
             <option value="@contains">@contains (包含)</option>
+            <option value="@eq">@eq (整数比较，等于)</option>
+            <option value="@ge">@ge (整数比较，大于等于)</option>
+            <option value="@gt">@gt (整数比较，大于)</option>
+            <option value="@le">@le (整数比较，小于等于)</option>
+            <option value="@lt">@lt (整数比较，小于)</option>
+            <option value="@noMatch">@noMatch (不匹配)</option>
+            <option value="@pm">@pm (不区分大小写，匹配大量关键字，空格分开多个值)</option>
+            <option value="@pmf">@pmf (pmFromFile简写，从文件获取值来匹配)</option>
+            <option value="@ipMatch">@ipMatch (匹配IP地址，支持网段逗号分隔多个值)</option>
+            <option value="@ipMatchFromFile">@ipMatchFromFile (匹配文件中IP地址，支持网段，文本中一行一条，支持加载http提供的内容)</option>
+            <option value="@containsWord">@containsWord (参数任意位置匹配)</option>
+            <option value="@detectSQLi">@detectSQLi (uri数据中的SQL注入)</option>
+            <option value="@detectXSS">@detectXSS (请求体内XSS注入)</option>
             <option value="@rx">@rx (正则表达式匹配)</option>
             <option value="@streq">@streq (字符串相等)</option>
+            <option value="@strmatch">@strmatch (字符串匹配)</option>
             <option value="@beginsWith">@beginsWith (以...开始)</option>
             <option value="@endsWith">@endsWith (以...结束)</option>
         </select>
