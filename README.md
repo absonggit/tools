@@ -11,6 +11,9 @@
 - files_to_tg
   - 多文件压缩发送TG 
   - 配置文件 config.yaml
+- file_watch_to_tg
+  - 监控文件内容，匹配关键字，发送内容到TG
+  - 配置文件 config.yaml
 - tgwebhook
   - tg 发消息webhook
   - HTTP方法: POST
