@@ -1,1 +1,36 @@
+# 监听的文件
+files:
+  - ./test.txt
 
+# 匹配关键字
+keywords:
+  - error
+
+# 匹配内容字段的正则表达式
+match_log_field:
+  'date': '(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})'
+  'file_path': '\[file "([^"]+)"\]'
+  'line_number': '\[line "(\d+)"\]'
+  'rule_id': '\[id "(\d+)"\]'
+  'client_ip': '\[client ([\d\.]+)\]'
+  'request': 'request: "([^"]+)"'
+  'host': 'host: "([^"]+)"'
+  'message': '\[msg "([^"]+)"\]'
+
+# Telegram 通知
+telegram:
+  bot_token: ""
+  chat_id: ""
+
+# 消息模版
+message_template: |
+  WAF 通知
+  ```
+  时间: {date} 
+  规则ID: {rule_id} 
+  规则文件: {file_path} 第 {line_number} 行 
+  请求IP: {client_ip} 
+  请求域名: {host} 
+  请求内容: {request} 
+  拦截消息: {message}
+  ```
