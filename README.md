@@ -26,4 +26,4 @@
     ```
 - ModSecurity 规则生成器
   - [规则生成器](https://absonggit.github.io/tools)
-- 支持秒级的定时器可以执行shell命令（替代crontab）
+- go-cron 支持秒级的定时器可以执行shell命令（替代crontab）
