@@ -1,0 +1,16 @@
+tasks:
+  - name: "Shell Task 1"
+    cron: "*/10 * * * * *"
+    command: "echo '执行任务 1'"
+    retries: 5
+    retry_interval: 10
+  - name: "Shell Task 2"
+    cron: "*/10 * * * * *"
+    command: "echo '执行任务 2'"
+    retries: 5
+    retry_interval: 10
+  - name: "Shell Task 3"
+    cron: "*/10 * * * * *"
+    command: "echo '执行任务 3' &"
+    retries: 5
+    retry_interval: 10
