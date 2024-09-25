@@ -13,21 +13,18 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// 定义任务结构体
 type Task struct {
 	Name          string `yaml:"name"`
 	Cron          string `yaml:"cron"`
 	Command       string `yaml:"command"`
-	Retries       int    `yaml:"retries"`       // 失败重试次数
-	RetryInterval int    `yaml:"retry_interval"` // 失败重试间隔（秒）
+	Retries       int    `yaml:"retries"`
+	RetryInterval int    `yaml:"retry_interval"`
 }
 
-// 定义配置文件结构体
 type Config struct {
 	Tasks []Task `yaml:"tasks"`
 }
 
-// 执行 Shell 脚本任务
 func shellTask(name, command string, retries, retryInterval int) {
 	go func() {
 		logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
@@ -55,7 +52,6 @@ func shellTask(name, command string, retries, retryInterval int) {
 	}()
 }
 
-// 加载配置文件
 func loadConfig(path string) (*Config, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -72,19 +68,15 @@ func loadConfig(path string) (*Config, error) {
 }
 
 func main() {
-	// 设置日志格式
 	log.SetFlags(log.Ldate | log.Ltime)
 
-	// 加载配置文件
 	config, err := loadConfig("config.yaml")
 	if err != nil {
 		log.Fatalf("加载配置文件出错: %v", err)
 	}
 
-	// 创建 cron 调度器
-	scheduler := cron.New(cron.WithSeconds()) // 支持秒级调度
+	scheduler := cron.New(cron.WithSeconds())
 
-	// 遍历配置中的任务并调度
 	for _, task := range config.Tasks {
 		_, err := scheduler.AddFunc(task.Cron, func(name, command string, retries, retryInterval int) func() {
 			return func() { shellTask(name, command, retries, retryInterval) }
@@ -94,10 +86,8 @@ func main() {
 		}
 	}
 
-	// 启动调度器
 	scheduler.Start()
 	log.Println("调度器已启动")
 
-	// 阻塞主线程
 	select {}
 }
