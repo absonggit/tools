@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/robfig/cron/v3"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"gopkg.in/yaml.v3"
 )
 
@@ -21,11 +22,32 @@ type Task struct {
 	RetryInterval int    `yaml:"retry_interval"`
 }
 
-type Config struct {
-	Tasks []Task `yaml:"tasks"`
+type TelegramConfig struct {
+	BotToken string `yaml:"bot_token"`
+	ChatID   int64  `yaml:"chat_id"`
 }
 
-func shellTask(name, command string, retries, retryInterval int) {
+type Config struct {
+	Telegram TelegramConfig `yaml:"telegram"`
+	Tasks    []Task         `yaml:"tasks"`
+}
+
+func sendTelegramMessage(botToken string, chatID int64, message string) error {
+	bot, err := tgbotapi.NewBotAPI(botToken)
+	if err != nil {
+		return fmt.Errorf("创建 Telegram Bot 失败: %v", err)
+	}
+
+	msg := tgbotapi.NewMessage(chatID, message)
+	_, err = bot.Send(msg)
+	if err != nil {
+		return fmt.Errorf("发送 Telegram 消息失败: %v", err)
+	}
+
+	return nil
+}
+
+func shellTask(name, command string, retries, retryInterval int, botToken string, chatID int64) {
 	go func() {
 		logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 		logger.Printf("[%s] 任务开始: %s", name, command)
@@ -47,6 +69,10 @@ func shellTask(name, command string, retries, retryInterval int) {
 				time.Sleep(time.Duration(retryInterval) * time.Second)
 			} else {
 				logger.Printf("[%s] 已达最大重试次数, 任务失败", name)
+				err := sendTelegramMessage(botToken, chatID, fmt.Sprintf("[%s] 任务失败: %s", name, stderr.String()))
+				if err != nil {
+					logger.Printf("[%s] 发送 Telegram 消息失败: %v", name, err)
+				}
 			}
 		}
 	}()
@@ -78,9 +104,9 @@ func main() {
 	scheduler := cron.New(cron.WithSeconds())
 
 	for _, task := range config.Tasks {
-		_, err := scheduler.AddFunc(task.Cron, func(name, command string, retries, retryInterval int) func() {
-			return func() { shellTask(name, command, retries, retryInterval) }
-		}(task.Name, task.Command, task.Retries, task.RetryInterval))
+		_, err := scheduler.AddFunc(task.Cron, func(name, command string, retries, retryInterval int, botToken string, chatID int64) func() {
+			return func() { shellTask(name, command, retries, retryInterval, botToken, chatID) }
+		}(task.Name, task.Command, task.Retries, task.RetryInterval, config.Telegram.BotToken, config.Telegram.ChatID))
 		if err != nil {
 			log.Fatalf("无法调度任务 %s: %v", task.Name, err)
 		}
