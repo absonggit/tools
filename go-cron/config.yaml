@@ -1,3 +1,6 @@
+telegram:
+  bot_token: "123456:ABCDEFGH"
+  chat_id: -123456
 tasks:
   - name: "Shell Task 1"
     cron: "*/10 * * * * *"
