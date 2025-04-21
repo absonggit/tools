@@ -39,4 +39,4 @@
       --add DOMAIN URL        添加配置
       --update DOMAIN NEW_URL 更新配置
       --delete DOMAIN         删除配置
-     ``` 
+      ```
