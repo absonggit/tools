@@ -33,12 +33,10 @@
   - caddy_manager.py python管理脚本
     - ```
       usage: caddy_manage.py [-h] [--list] [--add DOMAIN URL] [--update DOMAIN NEW_URL] [--delete DOMAIN]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --list                列出所有配置
-  --add DOMAIN URL      添加配置
-  --update DOMAIN NEW_URL
-                        更新配置
-  --delete DOMAIN       删除配置
-``` 
+      optional arguments:
+      -h, --help              show this help message and exit
+      --list                  列出所有配置
+      --add DOMAIN URL        添加配置
+      --update DOMAIN NEW_URL 更新配置
+      --delete DOMAIN         删除配置
+     ``` 
