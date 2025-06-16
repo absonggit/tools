@@ -1,0 +1,16 @@
+server:
+  port: 5000
+  read_timeout: 3
+  write_timeout: 3
+  idle_timeout: 60
+
+redis:
+  addr: "127.0.0.1:6379"
+  password: ""
+  db: 0
+  pool_size: 200
+  min_idle_conns: 50
+  pool_timeout: 2
+  dial_timeout: 1
+  read_timeout: 2 
+  write_timeout: 2 
