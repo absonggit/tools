@@ -1,0 +1,28 @@
+{
+    storage redis {
+        host           127.0.0.1
+        port           6379
+        address        127.0.0.1:6379
+        username       ""
+        password       ""
+        db             0
+        timeout        5
+        key_prefix     "caddy"
+        encryption_key ""
+        compression    false
+        tls_enabled    false
+        tls_insecure   true
+    }
+    on_demand_tls {
+        ask http://localhost:5000/check
+    }
+}
+:443 {
+    tls {
+        on_demand
+    }
+    reverse_proxy localhost:5000
+    header {
+        -Via
+    }
+}
