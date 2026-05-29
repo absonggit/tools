@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成 config.yaml 文件</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>生成 config.yaml 文件</h1>
+    <form id="configForm">
+        <label for="nodeName">节点名称：</label>
+        <input type="text" id="nodeName" name="nodeName" required>
+
+        <label for="nodeIP">节点 IP：</label>
+        <input type="text" id="nodeIP" name="nodeIP" required>
+
+        <label for="server">服务器地址：</label>
+        <input type="text" id="server" name="server" required>
+
+        <label for="token">Token：</label>
+        <input type="text" id="token" name="token" required>
+
+        <label for="otherConfig">其他配置：</label>
+        <textarea id="otherConfig" name="otherConfig" rows="5" placeholder="请填写其他配置以 YAML 格式..."></textarea>
+
+        <button type="submit">生成 Config</button>
+    </form>
+
+    <script>
+        document.getElementById('configForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止表单默认提交
+
+            // 获取表单数据
+            const nodeName = document.getElementById('nodeName').value;
+            const nodeIP = document.getElementById('nodeIP').value;
+            const server = document.getElementById('server').value;
+            const token = document.getElementById('token').value;
+            const otherConfig = document.getElementById('otherConfig').value;
+
+            // 生成 YAML 内容
+            const yamlContent = `
+# 自动生成的 config.yaml 文件
+node-name: ${nodeName}
+node-ip: ${nodeIP}
+server: ${server}
+token: ${token}
+${otherConfig}
+            `.trim();
+
+            // 创建 Blob 对象
+            const blob = new Blob([yamlContent], { type: 'text/yaml' });
+            const url = URL.createObjectURL(blob);
+
+            // 创建下载链接并触发下载
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config.yaml';
+            document.body.appendChild(a);
+            a.click();
+
+            // 清理 URL 对象
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        });
+    </script>
+</body>
+</html>
