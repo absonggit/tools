@@ -57,13 +57,13 @@
         <div id="serverConfig" class="configFields" style="display:none;">
             <h3>Server 配置</h3>
             <label for="tlsSAN">TLS SAN（以逗号分隔）：</label>
-            <input type="text" id="tlsSAN" name="tlsSAN" value="43.199.123.215,16.163.8.70,95.40.242.191,10.24.21.88,10.24.17.111,10.24.28.244" required>
+            <input type="text" id="tlsSAN" name="tlsSAN" value="" required>
 
             <label for="serviceNodePortRange">Service Node Port Range：</label>
             <input type="text" id="serviceNodePortRange" name="serviceNodePortRange" value="3000-50000" required>
 
             <label for="serverToken">Token：</label>
-            <input type="text" id="serverToken" name="serverToken" value="bvmdKNlCubNWayBvuIXBcWmBlNqHLVCpPgAuzEQkJZPbaQdYXpPIeAxFArddqUsrkDvHSRiPBFgTWNgALQFQrMnhkoAYJGhOnIxkDjrvUAEHXIlCooKQOzmtCZwYszGL" required>
+            <input type="text" id="serverToken" name="serverToken" value="" required>
 
             <label for="nodeTaint">Node Taint（以逗号分隔）：</label>
             <input type="text" id="nodeTaint" name="nodeTaint" value="node-role.kubernetes.io/control-plane:NoSchedule" required>
@@ -75,31 +75,31 @@
             <input type="text" id="nodeLabel" name="nodeLabel" value="master=true" required>
 
             <label for="nodeIP">节点 IP（以逗号分隔）：</label>
-            <input type="text" id="nodeIP" name="nodeIP" value="10.24.21.88" required>
+            <input type="text" id="nodeIP" name="nodeIP" value="" required>
 
             <label for="nodeExternalIP">节点外部 IP（以逗号分隔）：</label>
-            <input type="text" id="nodeExternalIP" name="nodeExternalIP" value="43.199.123.215" required>
+            <input type="text" id="nodeExternalIP" name="nodeExternalIP" value="" required>
         </div>
 
         <div id="agentConfig" class="configFields" style="display:none;">
             <h3>Agent 配置</h3>
             <label for="agentToken">Token：</label>
-            <input type="text" id="agentToken" name="agentToken" value="bvmdKNlCubNWayBvuIXBcWmBlNqHLVCpPgAuzEQkJZPbaQdYXpPIeAxFArddqUsrkDvHSRiPBFgTWNgALQFQrMnhkoAYJGhOnIxkDjrvUAEHXIlCooKQOzmtCZwYszGL" required>
+            <input type="text" id="agentToken" name="agentToken" value="" required>
 
             <label for="agentServer">Server 地址（以逗号分隔）：</label>
-            <input type="text" id="agentServer" name="agentServer" value="https://10.24.21.88:9345,https://10.24.17.111:9345,https://10.24.28.244:9345" required>
+            <input type="text" id="agentServer" name="agentServer" value="" required>
 
             <label for="agentNodeName">节点名称：</label>
-            <input type="text" id="agentNodeName" name="agentNodeName" value="api-2" required>
+            <input type="text" id="agentNodeName" name="agentNodeName" value="" required>
 
             <label for="agentNodeLabel">节点标签（以逗号分隔）：</label>
-            <input type="text" id="agentNodeLabel" name="agentNodeLabel" value="node.kubernetes.io/worker=true,api=true" required>
+            <input type="text" id="agentNodeLabel" name="agentNodeLabel" value="" required>
 
             <label for="agentNodeIP">节点 IP（以逗号分隔）：</label>
-            <input type="text" id="agentNodeIP" name="agentNodeIP" value="10.24.23.206" required>
+            <input type="text" id="agentNodeIP" name="agentNodeIP" value="" required>
 
             <label for="agentNodeExternalIP">节点外部 IP（以逗号分隔）：</label>
-            <input type="text" id="agentNodeExternalIP" name="agentNodeExternalIP" value="16.163.246.76" required>
+            <input type="text" id="agentNodeExternalIP" name="agentNodeExternalIP" value="" required>
         </div>
 
         <button type="submit">生成 Config</button>
