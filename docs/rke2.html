@@ -34,6 +34,14 @@
         button:hover {
             background-color: #45a049;
         }
+        #yamlOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            white-space: pre; /* 允许格式化 */
+        }
     </style>
 </head>
 <body>
@@ -57,6 +65,10 @@
         <button type="submit">生成 Config</button>
     </form>
 
+    <h2>生成的 config.yaml 内容：</h2>
+    <div id="yamlOutput"></div>
+    <button id="copyButton" style="display:none;">复制到剪贴板</button>
+
     <script>
         document.getElementById('configForm').addEventListener('submit', function(event) {
             event.preventDefault(); // 阻止表单默认提交
@@ -78,20 +90,21 @@ token: ${token}
 ${otherConfig}
             `.trim();
 
-            // 创建 Blob 对象
-            const blob = new Blob([yamlContent], { type: 'text/yaml' });
-            const url = URL.createObjectURL(blob);
+            // 显示生成的 YAML 内容
+            const yamlOutput = document.getElementById('yamlOutput');
+            yamlOutput.textContent = yamlContent; // 使用 textContent 以保持格式
 
-            // 创建下载链接并触发下载
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'config.yaml';
-            document.body.appendChild(a);
-            a.click();
-
-            // 清理 URL 对象
-            URL.revokeObjectURL(url);
-            document.body.removeChild(a);
+            // 显示复制按钮
+            const copyButton = document.getElementById('copyButton');
+            copyButton.style.display = 'inline-block';
+            copyButton.onclick = function() {
+                // 复制内容到剪贴板
+                navigator.clipboard.writeText(yamlContent).then(function() {
+                    alert('已复制到剪贴板！');
+                }, function(err) {
+                    alert('复制失败!', err);
+                });
+            };
         });
     </script>
 </body>
