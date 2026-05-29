@@ -47,20 +47,60 @@
 <body>
     <h1>生成 config.yaml 文件</h1>
     <form id="configForm">
-        <label for="nodeName">节点名称：</label>
-        <input type="text" id="nodeName" name="nodeName" required>
+        <label for="configType">选择配置类型：</label>
+        <select id="configType" name="configType" required>
+            <option value="" disabled selected>请选择配置类型</option>
+            <option value="server">Server 配置</option>
+            <option value="agent">Agent 配置</option>
+        </select>
 
-        <label for="nodeIP">节点 IP：</label>
-        <input type="text" id="nodeIP" name="nodeIP" required>
+        <div id="serverConfig" class="configFields" style="display:none;">
+            <h3>Server 配置</h3>
+            <label for="tlsSAN">TLS SAN（以逗号分隔）：</label>
+            <input type="text" id="tlsSAN" name="tlsSAN" value="43.199.123.215,16.163.8.70,95.40.242.191,10.24.21.88,10.24.17.111,10.24.28.244" required>
 
-        <label for="server">服务器地址：</label>
-        <input type="text" id="server" name="server" required>
+            <label for="serviceNodePortRange">Service Node Port Range：</label>
+            <input type="text" id="serviceNodePortRange" name="serviceNodePortRange" value="3000-50000" required>
 
-        <label for="token">Token：</label>
-        <input type="text" id="token" name="token" required>
+            <label for="serverToken">Token：</label>
+            <input type="text" id="serverToken" name="serverToken" value="bvmdKNlCubNWayBvuIXBcWmBlNqHLVCpPgAuzEQkJZPbaQdYXpPIeAxFArddqUsrkDvHSRiPBFgTWNgALQFQrMnhkoAYJGhOnIxkDjrvUAEHXIlCooKQOzmtCZwYszGL" required>
 
-        <label for="otherConfig">其他配置：</label>
-        <textarea id="otherConfig" name="otherConfig" rows="5" placeholder="请填写其他配置以 YAML 格式..."></textarea>
+            <label for="nodeTaint">Node Taint（以逗号分隔）：</label>
+            <input type="text" id="nodeTaint" name="nodeTaint" value="node-role.kubernetes.io/control-plane:NoSchedule" required>
+
+            <label for="nodeName">节点名称：</label>
+            <input type="text" id="nodeName" name="nodeName" value="master-1" required>
+
+            <label for="nodeLabel">节点标签（以逗号分隔）：</label>
+            <input type="text" id="nodeLabel" name="nodeLabel" value="master=true" required>
+
+            <label for="nodeIP">节点 IP（以逗号分隔）：</label>
+            <input type="text" id="nodeIP" name="nodeIP" value="10.24.21.88" required>
+
+            <label for="nodeExternalIP">节点外部 IP（以逗号分隔）：</label>
+            <input type="text" id="nodeExternalIP" name="nodeExternalIP" value="43.199.123.215" required>
+        </div>
+
+        <div id="agentConfig" class="configFields" style="display:none;">
+            <h3>Agent 配置</h3>
+            <label for="agentToken">Token：</label>
+            <input type="text" id="agentToken" name="agentToken" value="bvmdKNlCubNWayBvuIXBcWmBlNqHLVCpPgAuzEQkJZPbaQdYXpPIeAxFArddqUsrkDvHSRiPBFgTWNgALQFQrMnhkoAYJGhOnIxkDjrvUAEHXIlCooKQOzmtCZwYszGL" required>
+
+            <label for="agentServer">Server 地址（以逗号分隔）：</label>
+            <input type="text" id="agentServer" name="agentServer" value="https://10.24.21.88:9345,https://10.24.17.111:9345,https://10.24.28.244:9345" required>
+
+            <label for="agentNodeName">节点名称：</label>
+            <input type="text" id="agentNodeName" name="agentNodeName" value="api-2" required>
+
+            <label for="agentNodeLabel">节点标签（以逗号分隔）：</label>
+            <input type="text" id="agentNodeLabel" name="agentNodeLabel" value="node.kubernetes.io/worker=true,api=true" required>
+
+            <label for="agentNodeIP">节点 IP（以逗号分隔）：</label>
+            <input type="text" id="agentNodeIP" name="agentNodeIP" value="10.24.23.206" required>
+
+            <label for="agentNodeExternalIP">节点外部 IP（以逗号分隔）：</label>
+            <input type="text" id="agentNodeExternalIP" name="agentNodeExternalIP" value="16.163.246.76" required>
+        </div>
 
         <button type="submit">生成 Config</button>
     </form>
@@ -70,25 +110,66 @@
     <button id="copyButton" style="display:none;">复制到剪贴板</button>
 
     <script>
+        document.getElementById('configType').addEventListener('change', function() {
+            const selectedType = this.value;
+            document.getElementById('serverConfig').style.display = selectedType === 'server' ? 'block' : 'none';
+            document.getElementById('agentConfig').style.display = selectedType === 'agent' ? 'block' : 'none';
+        });
+
         document.getElementById('configForm').addEventListener('submit', function(event) {
             event.preventDefault(); // 阻止表单默认提交
 
-            // 获取表单数据
-            const nodeName = document.getElementById('nodeName').value;
-            const nodeIP = document.getElementById('nodeIP').value;
-            const server = document.getElementById('server').value;
-            const token = document.getElementById('token').value;
-            const otherConfig = document.getElementById('otherConfig').value;
+            const configType = document.getElementById('configType').value;
+            let yamlContent = '';
 
-            // 生成 YAML 内容
-            const yamlContent = `
-# 自动生成的 config.yaml 文件
-node-name: ${nodeName}
-node-ip: ${nodeIP}
-server: ${server}
-token: ${token}
-${otherConfig}
-            `.trim();
+            if (configType === 'server') {
+                const tlsSAN = document.getElementById('tlsSAN').value.split(',');
+                const serviceNodePortRange = document.getElementById('serviceNodePortRange').value;
+                const serverToken = document.getElementById('serverToken').value;
+                const nodeTaint = document.getElementById('nodeTaint').value.split(',');
+                const nodeName = document.getElementById('nodeName').value;
+                const nodeLabel = document.getElementById('nodeLabel').value.split(',');
+                const nodeIP = document.getElementById('nodeIP').value.split(',');
+                const nodeExternalIP = document.getElementById('nodeExternalIP').value.split(',');
+
+                yamlContent = `
+# Server 配置
+tls-san:
+  - ${tlsSAN.join('\n  - ')}
+service-node-port-range: "${serviceNodePortRange}"
+token: "${serverToken}"
+node-taint:
+  - ${nodeTaint.join('\n  - ')}
+node-name: "${nodeName}"
+node-label:
+  - ${nodeLabel.join('\n  - ')}
+node-ip:
+  - ${nodeIP.join('\n  - ')}
+node-external-ip:
+  - ${nodeExternalIP.join('\n  - ')}
+                `.trim();
+            } else if (configType === 'agent') {
+                const agentToken = document.getElementById('agentToken').value;
+                const agentServer = document.getElementById('agentServer').value.split(',');
+                const agentNodeName = document.getElementById('agentNodeName').value;
+                const agentNodeLabel = document.getElementById('agentNodeLabel').value.split(',');
+                const agentNodeIP = document.getElementById('agentNodeIP').value.split(',');
+                const agentNodeExternalIP = document.getElementById('agentNodeExternalIP').value.split(',');
+
+                yamlContent = `
+# Agent 配置
+token: "${agentToken}"
+server:
+  - ${agentServer.join('\n  - ')}
+node-name: "${agentNodeName}"
+node-label:
+  - ${agentNodeLabel.join('\n  - ')}
+node-ip:
+  - ${agentNodeIP.join('\n  - ')}
+node-external-ip:
+  - ${agentNodeExternalIP.join('\n  - ')}
+                `.trim();
+            }
 
             // 显示生成的 YAML 内容
             const yamlOutput = document.getElementById('yamlOutput');
@@ -97,6 +178,8 @@ ${otherConfig}
             // 显示复制按钮
             const copyButton = document.getElementById('copyButton');
             copyButton.style.display = 'inline-block';
+
+            // 绑定复制按钮事件
             copyButton.onclick = function() {
                 // 复制内容到剪贴板
                 navigator.clipboard.writeText(yamlContent).then(function() {
